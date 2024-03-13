@@ -1,0 +1,26 @@
+conf t
+vtp mode server 
+vtp domain TEST
+vtp password cisco 
+vlan 10
+name student 
+ex
+int range f0/1, f0/4, f0/2
+switchport mode trunk 
+switchport access vlan 10
+end 
+vlan brief 
+
+en 
+conf t 
+vtp mode client 
+vtp domain TEST
+vtp password cisco 
+int range f0/1, f0/4, f0/2
+switchport mode access
+switchport mode trunk 
+switchport access vlan 10
+end 
+vlan brief 
+repeat for r3 and r4 
+

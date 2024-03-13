@@ -1,0 +1,72 @@
+r1
+int e1/0
+ip add 10.1.1.1 255.255.255.0
+no sh
+ip add 172.16.1.1 255.255.255.0
+
+r2
+int e1/0
+ip add 10.1.1.2 255.255.255.0
+no shut
+
+r3
+int e0/0
+ip add 10.2.2.2 255.255.255.9
+no shut 
+ip add 172.16.2.1 255.255.255.0
+router rip
+network 10.2.2.0
+network 127.16.2.0
+no auto-summary
+end
+
+go in 1st r1
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#int e1/0
+R2(config-if)#ip add 10.1.1.1 255.255.255.0
+R2(config-if)#no sh
+R2(config-if)#exit
+R2(config)#
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#router eigrp 10
+R2(config-router)#network 174.16.1.0
+R2(config-router)#network 10.1.1.0
+R2(config-router)#no auto-summary
+R2(config-router)#end
+R2#sho ip rou
+go in 3rd router
+R3#sh ip rou
+
+go to middle router 
+R4(config)#int e1/0
+R4(config-if)#ip add 10.1.1.2 255.255.255.0
+R4(config-if)#no shut
+R4(config-if)#
+*Mar  1 00:03:00.651: %LINK-3-UPDOWN: Interface Ethernet1/0, changed state to up
+*Mar  1 00:03:01.651: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/0, changed state to up
+R4(config-if)#router rip
+R4(config-router)#default-metric 5
+R4(config-router)#redistribute eigrp
+% Incomplete command.
+
+R4(config-router)#redistribute eigrp 10
+R4(config-router)#router eigrp 10
+R4(config-router)#default-metric 1550 ?
+  <0-4294967295>  Delay metric, in 10 microsecond units
+
+R4(config-router)#default-metric 1500 100 ?
+  <0-255>  Reliability metric where 255 is 100% reliable
+
+R4(config-router)#default-metric 1500 100 255 ?
+  <1-255>  Effective bandwidth metric (Loading) where 255 is 100% loaded
+
+R4(config-router)#
+R4(config-router)#default-metric 1500 100 255 1 ?
+  <1-65535>  Maximum Transmission Unit metric of the path
+
+R4(config-router)#default-metric 1500 100 255 1 1500
+R4(config-router)#redistribute rip
+R4(config-router)#end
+

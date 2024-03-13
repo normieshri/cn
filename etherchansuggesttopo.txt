@@ -1,0 +1,22 @@
+en 
+conf t 
+int port-channel 1
+ex
+int range fast0/1-3
+channel-group 1 mode on 
+end
+
+s2
+en 
+conf t
+int port-channel 1
+end 
+
+conf t 
+int range fast0/1-3
+channel-group 1 mode on
+end
+
+repeat for s3/s4
+
+
